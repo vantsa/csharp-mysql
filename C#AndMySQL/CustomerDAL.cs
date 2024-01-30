@@ -20,22 +20,34 @@ namespace C_AndMySQL
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                using (MySqlCommand command = new MySqlCommand("CustomerInsert", connection))
+                using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    try
+                    {
+                        using (MySqlCommand command = new MySqlCommand("CustomerInsert", connection))
+                        {
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
-                    command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
-                    command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
-                    command.Parameters.AddWithValue("@p_password", pCustomer.Password);
+                            command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
+                            command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
+                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
+                            command.Parameters.AddWithValue("@p_password", pCustomer.Password);
 
-                    MySqlParameter outputParameter = new MySqlParameter("@Inserted_ID", MySqlDbType.Int32);
-                    outputParameter.Direction = System.Data.ParameterDirection.Output;
-                    command.Parameters.Add(outputParameter);
+                            MySqlParameter outputParameter = new MySqlParameter("@Inserted_ID", MySqlDbType.Int32);
+                            outputParameter.Direction = System.Data.ParameterDirection.Output;
+                            command.Parameters.Add(outputParameter);
 
-                    command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
-                    pCustomer.ID = Convert.ToInt32(outputParameter.Value);
+                            pCustomer.ID = Convert.ToInt32(outputParameter.Value);
+                        }
+                        transaction.Commit();
+                    }
+                    catch(Exception e)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine($"Error in Insert: {e.Message}");
+                    }
                 }
             } 
         }
@@ -45,18 +57,30 @@ namespace C_AndMySQL
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                using(MySqlCommand command = new MySqlCommand("CustomerUpdate", connection))
+                using(MySqlTransaction transaction  = connection.BeginTransaction())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    try
+                    {
+                        using (MySqlCommand command = new MySqlCommand("CustomerUpdate", connection))
+                        {
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
-                    command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
-                    command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
-                    command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
-                    command.Parameters.AddWithValue("@p_password", pCustomer.Password);
-                    command.Parameters.AddWithValue("@p_Is_Active", pCustomer.Is_Active);
+                            command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
+                            command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
+                            command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
+                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
+                            command.Parameters.AddWithValue("@p_password", pCustomer.Password);
+                            command.Parameters.AddWithValue("@p_Is_Active", pCustomer.Is_Active);
 
-                    command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+
+                    }catch(Exception e)
+                    {
+                        Console.WriteLine($"Error in update: {e.Message}");
+                    }
                 }
             }
         }
@@ -66,13 +90,24 @@ namespace C_AndMySQL
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                using (MySqlCommand command = new MySqlCommand("CustomerDelete", connection))
+                using(MySqlTransaction transaction = connection.BeginTransaction())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    try
+                    {
+                        using (MySqlCommand command = new MySqlCommand("CustomerDelete", connection))
+                        {
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
+                            command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
 
-                    command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }catch(Exception e)
+                    {
+                        Console.WriteLine($"Error in Delete: {e.Message}");
+                    }
                 }
             }
         }
@@ -82,26 +117,39 @@ namespace C_AndMySQL
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                using (MySqlCommand command = new MySqlCommand("CustomerGetByID", connection))
+                using(MySqlTransaction transaction = connection.BeginTransaction())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    try
+                    {
+                        using (MySqlCommand command = new MySqlCommand("CustomerGetByID", connection))
+                        {
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
+                            command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
 
-                    command.Parameters.Add("@p_Name", MySqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@p_Email", MySqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@p_User_Name", MySqlDbType.VarChar, 25).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@p_password", MySqlDbType.VarChar, 25).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@p_Is_Active", MySqlDbType.Bit).Direction = ParameterDirection.Output;
+                            command.Parameters.Add("@p_Name", MySqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
+                            command.Parameters.Add("@p_Email", MySqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
+                            command.Parameters.Add("@p_User_Name", MySqlDbType.VarChar, 25).Direction = ParameterDirection.Output;
+                            command.Parameters.Add("@p_password", MySqlDbType.VarChar, 25).Direction = ParameterDirection.Output;
+                            command.Parameters.Add("@p_Is_Active", MySqlDbType.Bit).Direction = ParameterDirection.Output;
 
-                    command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
-                    pCustomer.Name = command.Parameters["@p_Name"].Value.ToString();
-                    pCustomer.Email = command.Parameters["@p_Email"].Value.ToString();
-                    pCustomer.User_Name = command.Parameters["@p_User_Name"].Value.ToString();
-                    pCustomer.Password = command.Parameters["@p_password"].Value.ToString();
-                    pCustomer.Is_Active = Convert.ToBoolean(command.Parameters["@p_Is_Active"].Value);
+                            pCustomer.Name = command.Parameters["@p_Name"].Value.ToString();
+                            pCustomer.Email = command.Parameters["@p_Email"].Value.ToString();
+                            pCustomer.User_Name = command.Parameters["@p_User_Name"].Value.ToString();
+                            pCustomer.Password = command.Parameters["@p_password"].Value.ToString();
+                            pCustomer.Is_Active = Convert.ToBoolean(command.Parameters["@p_Is_Active"].Value);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Error in GetByID: {e.Message}");
+                    }
                 }
+
             }
         }
 
@@ -112,18 +160,30 @@ namespace C_AndMySQL
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                using (MySqlCommand command = new MySqlCommand("CustomerBrowse", connection))
+                using(MySqlTransaction  transaction = connection.BeginTransaction())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    command.Parameters.AddWithValue("@p_Name", string.IsNullOrEmpty(pCustomer.Name) ? null : pCustomer.Name);
-                    command.Parameters.AddWithValue("@p_Email", string.IsNullOrEmpty(pCustomer.Email) ? null : pCustomer.Email);
-
-                    using (MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command))
+                    try
                     {
-                        dataAdapter.Fill(dataSet);
+                        using (MySqlCommand command = new MySqlCommand("CustomerBrowse", connection))
+                        {
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                            command.Parameters.AddWithValue("@p_Name", string.IsNullOrEmpty(pCustomer.Name) ? null : pCustomer.Name);
+                            command.Parameters.AddWithValue("@p_Email", string.IsNullOrEmpty(pCustomer.Email) ? null : pCustomer.Email);
+
+                            using (MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command))
+                            {
+                                dataAdapter.Fill(dataSet);
+                            }
+                        }
+
+                        transaction.Commit();
                     }
-                }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine($"Error in Browse: {e.Message}");
+                    }
+                }      
             }
             return dataSet;
         }
