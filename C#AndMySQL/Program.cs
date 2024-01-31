@@ -5,9 +5,22 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        TestCustomerDAL();
+        //TestCustomerDAL();
 
-        TestCustomerSentEmail();
+        //TestCustomerSentEmail();
+
+        DbTable dbTableAttribute = (DbTable)Attribute.GetCustomAttribute(typeof(Customer), typeof(DbTable));
+        string tableName = dbTableAttribute?.TableName ?? "Unknown";
+        Console.WriteLine($"Table Name: {tableName}");
+
+        // Retrieve DbField attribute values for each property
+        foreach (var propertyInfo in typeof(Customer).GetProperties())
+        {
+            DbField dbFieldAttribute = (DbField)Attribute.GetCustomAttribute(propertyInfo, typeof(DbField));
+            string fieldName = dbFieldAttribute?.FieldName ?? propertyInfo.Name;
+            Console.WriteLine($"{propertyInfo.Name} Field Name: {fieldName}");
+
+        }
     }
 
     private static void TestCustomerDAL()
