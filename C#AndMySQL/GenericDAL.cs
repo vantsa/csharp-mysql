@@ -26,25 +26,21 @@ namespace C_AndMySQL
                         #region Attributes
                         DbTable dbTableAttribute = (DbTable)Attribute.GetCustomAttribute(typeof(T), typeof(DbTable));
                         string tableName = dbTableAttribute?.TableName ?? typeof(T).Name;
-
-                        PropertyInfo[] properties = typeof(T).GetProperties();
-                        string fieldNames = string.Join(", ", properties.Select(prop =>
-                        {
-                            DbField dbFieldAttribute = (DbField)Attribute.GetCustomAttribute(prop, typeof(DbField));
-                            return dbFieldAttribute?.FieldName ?? prop.Name;
-                        }));
                         #endregion
 
-                        string query = $"INSERT INTO {tableName} ({fieldNames}) VALUES ({string.Join(", ", properties.Select(prop => $"@{prop.Name}"))})";
-
-                        using(MySqlCommand command = new MySqlCommand(query, connection, transaction))
+                        using (MySqlCommand command = new MySqlCommand("CustomerInsert", connection, transaction))
                         {
-                            foreach(var prop in properties)
-                            {
-                                command.Parameters.AddWithValue($"@{prop.Name}", prop.GetValue(entity)); 
-                            }
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
 
+                            foreach(var prop in typeof(T).GetProperties())
+                            {
+                                DbField dbFieldAttribute = (DbField)Attribute.GetCustomAttribute(prop, typeof(DbField));
+                                string fieldName = dbFieldAttribute?.FieldName ?? prop.Name;
+
+                                command.Parameters.AddWithValue($"p_{fieldName}", prop.GetValue(entity));
+                            }
                             command.ExecuteNonQuery();
+
                         }
                         transaction.Commit();
                     }
@@ -120,11 +116,14 @@ namespace C_AndMySQL
                         #endregion
 
                         // Build DELETE query
-                        string query = $"DELETE FROM {tableName} WHERE {GetPrimaryKeyCondition()}";
+                        //string query = $"DELETE FROM {tableName} WHERE {GetPrimaryKeyCondition()}";
 
-                        using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
+                        using (MySqlCommand command = new MySqlCommand("CustomerDelete", connection, transaction))
                         {
-                            command.Parameters.AddWithValue("@ID", primaryKeyValue);
+                            command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                            command.Parameters.AddWithValue("@p_ID", primaryKeyValue);
+
                             command.ExecuteNonQuery();
                         }
 
@@ -213,6 +212,13 @@ namespace C_AndMySQL
             }
 
             return primaryKeyProperty;
+        }
+
+        private static bool IsExcludedField(PropertyInfo property)
+        {
+            string[] excludedFields = { "ID", "IsActive" };
+
+            return excludedFields.Contains(property.Name);
         }
     }
 }

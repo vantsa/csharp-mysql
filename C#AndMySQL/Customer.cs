@@ -10,23 +10,23 @@ namespace C_AndMySQL
     internal class Customer
     {
         #region Fields
-        [DbField("customer_id")]
+        [DbField("ID")]
         public int ID { get; set; }
 
-        [DbField("customer_name")]
+        [DbField("Name")]
         public string? Name { get; set; }
 
-        [DbField("customer_email")]
+        [DbField("Email")]
         public string? Email { get; set; }
 
-        [DbField("customer_username")]
-        public string? User_Name { get; set; }
+        [DbField("User_Name")]
+        public string? UserName { get; set; }
 
-        [DbField("customer_password")]
+        [DbField("Password")]
         public string? Password { get; set; }
 
-        [DbField("customer_isactive")]
-        public bool Is_Active { get; set; }
+        [DbField("Is_Active")]
+        public bool IsActive { get; set; }
         #endregion
     }
 }

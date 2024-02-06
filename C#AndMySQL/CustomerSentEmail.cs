@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace C_AndMySQL
 {
-    internal class Customer_Sent_Emails
+    internal class CustomerSentEmail
     {
         #region Fields
         public int ID { get; set; }

@@ -9,7 +9,7 @@ internal class Program
 
         //TestCustomerSentEmail();
 
-        DbTable dbTableAttribute = (DbTable)Attribute.GetCustomAttribute(typeof(Customer), typeof(DbTable));
+        /*DbTable dbTableAttribute = (DbTable)Attribute.GetCustomAttribute(typeof(Customer), typeof(DbTable));
         string tableName = dbTableAttribute?.TableName ?? "Unknown";
         Console.WriteLine($"Table Name: {tableName}");
 
@@ -18,8 +18,23 @@ internal class Program
             DbField dbFieldAttribute = (DbField)Attribute.GetCustomAttribute(propertyInfo, typeof(DbField));
             string fieldName = dbFieldAttribute?.FieldName ?? propertyInfo.Name;
             Console.WriteLine($"{propertyInfo.Name} Field Name: {fieldName}");
+        }*/
 
-        }
+        Customer enetix = new Customer
+        {
+            Name = "Enetix Csik",
+            Email = "enetix@enetix.ro",
+            UserName = "EnetixJunior",
+            Password = "Xitene.2023"
+        };
+        //GenericDAL<Customer>.Insert(enetix);
+        Customer enetix2 = new Customer
+        {
+            ID = 9,
+        };
+        GenericDAL<Customer>.Delete(enetix2);
+
+
     }
 
     private static void TestCustomerDAL()
@@ -31,7 +46,7 @@ internal class Program
             {
                 Name = "Elek Vicc",
                 Email = "viccelek@citromail.com",
-                User_Name = "Vicc",
+                UserName = "Vicc",
                 Password = "nemvicc",
             };
             CustomerDAL.Insert(c1);
@@ -43,9 +58,9 @@ internal class Program
                 ID = 5,
                 Name = "Adorjan Attila",
                 Email = "aattila@yahoo.com",
-                User_Name = "keeper",
+                UserName = "keeper",
                 Password = "sportklub",
-                Is_Active = false,
+                IsActive = false,
             };
             CustomerDAL.Update(c2);
             #endregion
@@ -67,9 +82,9 @@ internal class Program
              Console.WriteLine($"Customer ID: {c4.ID}");
              Console.WriteLine($"Customer Name: {c4.Name}");
              Console.WriteLine($"Customer Email: {c4.Email}");
-             Console.WriteLine($"Customer UserName: {c4.User_Name}");
+             Console.WriteLine($"Customer UserName: {c4.UserName}");
              Console.WriteLine($"Customer password: {c4.Password}");
-             Console.WriteLine($"Customer isactive: {c4.Is_Active}");
+             Console.WriteLine($"Customer isactive: {c4.IsActive}");
             #endregion
 
             #region DataSet and List<Customer>
@@ -100,7 +115,7 @@ internal class Program
         try
         {
             #region Insert
-            Customer_Sent_Emails se = new Customer_Sent_Emails
+            CustomerSentEmail se = new CustomerSentEmail
             {
                 Customer_ID = 2,
                 From_Address = "pityipalko@gmail.com",
@@ -114,7 +129,7 @@ internal class Program
             #endregion
 
             #region Update
-            Customer_Sent_Emails seUpdate = new Customer_Sent_Emails
+            CustomerSentEmail seUpdate = new CustomerSentEmail
             {
                 ID = 3,
                 Customer_ID = 6,
@@ -129,7 +144,7 @@ internal class Program
             #endregion
 
             #region Delete
-            Customer_Sent_Emails seDelete = new Customer_Sent_Emails
+            CustomerSentEmail seDelete = new CustomerSentEmail
             {
                 ID = 4,
             };
@@ -137,7 +152,7 @@ internal class Program
             #endregion
 
             #region GetByID
-            Customer_Sent_Emails seGetByID = new Customer_Sent_Emails
+            CustomerSentEmail seGetByID = new CustomerSentEmail
             {
                 ID = 3,
             };
@@ -149,14 +164,14 @@ internal class Program
             #endregion
 
             #region DataSet and List<Customer_Sent_Email> 
-            Customer_Sent_Emails seBrowse = new Customer_Sent_Emails
+            CustomerSentEmail seBrowse = new CustomerSentEmail
             {
                 From_Address = "a",
                 Subject = "a"
             };
             DataSet resultData = CustomerSentEmailDAL.Browse(seBrowse);
             DisplayData(resultData);
-            List<Customer_Sent_Emails> emailCollection = CustomerSentEmailDAL.GetCollection(seBrowse);
+            List<CustomerSentEmail> emailCollection = CustomerSentEmailDAL.GetCollection(seBrowse);
             foreach (var email in emailCollection)
             {
                 Console.WriteLine($"Subject: {email.Subject}");

@@ -30,7 +30,7 @@ namespace C_AndMySQL
 
                             command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
                             command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
-                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
+                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.UserName);
                             command.Parameters.AddWithValue("@p_password", pCustomer.Password);
 
                             MySqlParameter outputParameter = new MySqlParameter("@Inserted_ID", MySqlDbType.Int32);
@@ -68,9 +68,9 @@ namespace C_AndMySQL
                             command.Parameters.AddWithValue("@p_ID", pCustomer.ID);
                             command.Parameters.AddWithValue("@p_Name", pCustomer.Name);
                             command.Parameters.AddWithValue("@p_Email", pCustomer.Email);
-                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.User_Name);
+                            command.Parameters.AddWithValue("@p_User_Name", pCustomer.UserName);
                             command.Parameters.AddWithValue("@p_password", pCustomer.Password);
-                            command.Parameters.AddWithValue("@p_Is_Active", pCustomer.Is_Active);
+                            command.Parameters.AddWithValue("@p_Is_Active", pCustomer.IsActive);
 
                             command.ExecuteNonQuery();
                         }
@@ -137,9 +137,9 @@ namespace C_AndMySQL
 
                             pCustomer.Name = command.Parameters["@p_Name"].Value.ToString();
                             pCustomer.Email = command.Parameters["@p_Email"].Value.ToString();
-                            pCustomer.User_Name = command.Parameters["@p_User_Name"].Value.ToString();
+                            pCustomer.UserName = command.Parameters["@p_User_Name"].Value.ToString();
                             pCustomer.Password = command.Parameters["@p_password"].Value.ToString();
-                            pCustomer.Is_Active = Convert.ToBoolean(command.Parameters["@p_Is_Active"].Value);
+                            pCustomer.IsActive = Convert.ToBoolean(command.Parameters["@p_Is_Active"].Value);
                         }
 
                         transaction.Commit();
@@ -211,9 +211,9 @@ namespace C_AndMySQL
                                 ID = Convert.ToInt32(reader["ID"]),
                                 Name = reader["Name"].ToString(),
                                 Email = reader["Email"].ToString(),
-                                User_Name = reader["User_Name"].ToString(),
+                                UserName = reader["User_Name"].ToString(),
                                 Password = reader["password"].ToString(),
-                                Is_Active = Convert.ToBoolean(reader["Is_Active"])
+                                IsActive = Convert.ToBoolean(reader["Is_Active"])
                             };
 
                             customerList.Add(customer);

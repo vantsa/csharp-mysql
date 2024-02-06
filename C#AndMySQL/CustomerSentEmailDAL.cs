@@ -15,7 +15,7 @@ namespace C_AndMySQL
         #endregion
 
         #region Methods
-        public static void Insert(Customer_Sent_Emails pSentEmail)
+        public static void Insert(CustomerSentEmail pSentEmail)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -47,7 +47,7 @@ namespace C_AndMySQL
             }
         }
 
-        public static void Update(Customer_Sent_Emails pSentEmail)
+        public static void Update(CustomerSentEmail pSentEmail)
         {
             using(MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -88,7 +88,7 @@ namespace C_AndMySQL
             }
         }
 
-        public static void Delete(Customer_Sent_Emails pSentEmail)
+        public static void Delete(CustomerSentEmail pSentEmail)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -115,7 +115,7 @@ namespace C_AndMySQL
             }
         }
 
-        public static void GetByID(Customer_Sent_Emails pSentEmail)
+        public static void GetByID(CustomerSentEmail pSentEmail)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -154,7 +154,7 @@ namespace C_AndMySQL
             }
         }
 
-        public static DataSet Browse(Customer_Sent_Emails pSentEmail)
+        public static DataSet Browse(CustomerSentEmail pSentEmail)
         {
             DataSet dataSet = new DataSet();
 
@@ -191,9 +191,9 @@ namespace C_AndMySQL
             return dataSet;
         }
 
-        public static List<Customer_Sent_Emails> GetCollection(Customer_Sent_Emails pSentEmail)
+        public static List<CustomerSentEmail> GetCollection(CustomerSentEmail pSentEmail)
         {
-            List<Customer_Sent_Emails> sentEmailsList = new List<Customer_Sent_Emails>();
+            List<CustomerSentEmail> sentEmailsList = new List<CustomerSentEmail>();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -216,7 +216,7 @@ namespace C_AndMySQL
                             {
                                 while (reader.Read())
                                 {
-                                    Customer_Sent_Emails sentEmail = new Customer_Sent_Emails
+                                    CustomerSentEmail sentEmail = new CustomerSentEmail
                                     {
                                         ID = Convert.ToInt32(reader["ID"]),
                                         Customer_ID = Convert.ToInt32(reader["Customer_ID"]),
