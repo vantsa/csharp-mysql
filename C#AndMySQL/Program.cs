@@ -13,7 +13,6 @@ internal class Program
         string tableName = dbTableAttribute?.TableName ?? "Unknown";
         Console.WriteLine($"Table Name: {tableName}");
 
-        // Retrieve DbField attribute values for each property
         foreach (var propertyInfo in typeof(Customer).GetProperties())
         {
             DbField dbFieldAttribute = (DbField)Attribute.GetCustomAttribute(propertyInfo, typeof(DbField));
