@@ -20,13 +20,6 @@ internal class Program
             Console.WriteLine($"{propertyInfo.Name} Field Name: {fieldName}");
         }*/
 
-        Customer enetix = new Customer
-        {
-            Name = "Enetix Csik",
-            Email = "enetix@enetix.ro",
-            UserName = "EnetixJunior",
-            Password = "Xitene.2023"
-        };
         //GenericDAL<Customer>.Insert(enetix);
         Customer enetix2 = new Customer
         {
